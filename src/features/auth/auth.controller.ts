@@ -1,6 +1,17 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import type { AuthenticationPayload } from './types/auth.payload.types';
+import type { Response } from 'express';
+import { JwtAuthGuard } from './guards/jwt-auth-guard';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +28,7 @@ export class AuthController {
     //redirect to login page if successful, or do it on the front
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('sign-in')
   async signIn(@Body() signInPayload: AuthenticationPayload) {
     const payload = await this.authService.login(
@@ -25,5 +37,13 @@ export class AuthController {
     );
 
     return payload;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('protected')
+  async protectedRoute(@Res() res: Response) {
+    return res.json({
+      message: 'hi',
+    });
   }
 }
