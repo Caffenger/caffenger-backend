@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
   moduleFormat = "cjs"
 }
 
@@ -15,9 +15,9 @@ datasource db {
 }
 
 model User {
-  id String @unique @default(cuid())
-  email String @unique
-  password String 
-  createdAt DateTime @default(now())
-  deletedAt DateTime 
+  id        String    @unique @default(cuid())
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
 }

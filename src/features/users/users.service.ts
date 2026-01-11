@@ -13,4 +13,20 @@ export class UsersService {
       },
     });
   }
+
+  async createOne(email: string, password: string): Promise<User | null> {
+    const exists = await this.prismaService.user.findUnique({
+      where: { email: email },
+    });
+
+    if (exists) return null;
+
+    return await this.prismaService.user.create({
+      data: {
+        email: email,
+        password: password,
+        createdAt: new Date(),
+      },
+    });
+  }
 }
