@@ -31,6 +31,7 @@ export class AuthService {
       email: user.email,
     };
     return {
+      message: 'Sign in successful!',
       access_token: await this.jwtService.signAsync(payload),
     };
   }
@@ -48,6 +49,9 @@ export class AuthService {
         'Error while registering new user, try again in a couple of minutes',
       );
 
-    return newUser;
+    return {
+      message: 'Succesfully registered!',
+      user: newUser,
+    };
   }
 }
