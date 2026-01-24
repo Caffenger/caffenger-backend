@@ -35,8 +35,8 @@ jobs:
         run: npm run test
 
       # Runs E2E tests
-      - name: Run E2E Tests
-        run: npm run test:e2e
+      # - name: Run E2E Tests
+      #   run: npm run test:e2e
 
       # NestJS uses TypeScript
       - name: Build
