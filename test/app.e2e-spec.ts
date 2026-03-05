@@ -4,6 +4,15 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from './../src/app.module';
 
+jest.mock('@/lib/prisma/prisma.service', () => ({
+  PrismaService: jest.fn().mockImplementation(() => ({
+    // Add empty mocks for the models your app touches during start
+    user: { findUnique: jest.fn() },
+    $connect: jest.fn(),
+    $on: jest.fn(),
+  })),
+}));
+
 describe('AppController (e2e)', () => {
   let app: INestApplication<App>;
 
