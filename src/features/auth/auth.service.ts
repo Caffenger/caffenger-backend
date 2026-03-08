@@ -36,13 +36,17 @@ export class AuthService {
     };
   }
 
-  async register(email: string, password: string) {
+  async register(email: string, password: string, name: string) {
     const emailExists = await this.usersService.findOne(email);
 
     if (emailExists) throw new ForbiddenException('Email already in use');
 
     const hashedPassword = await hashPassword(password);
-    const newUser = await this.usersService.createOne(email, hashedPassword);
+    const newUser = await this.usersService.createOne(
+      email,
+      name,
+      hashedPassword,
+    );
 
     if (!newUser)
       throw new InternalServerErrorException(

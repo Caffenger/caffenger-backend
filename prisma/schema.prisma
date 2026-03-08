@@ -8,10 +8,141 @@ datasource db {
   provider = "postgresql"
 }
 
+enum CafeStaffRole {
+  OWNER
+  SERVER
+  BARISTA
+}
+
+enum ObjectTypeEnum {
+  TABLE
+  SEAT
+  WALL
+}
+
+enum MenuItemType {
+  FOOD
+  DRINK
+}
+
 model User {
-  id        String   @unique @default(cuid())
-  email     String   @unique
+  id        String    @id @default(cuid())
+  email     String    @unique
   password  String
-  createdAt DateTime @default(now())
+  name      String
+  createdAt DateTime  @default(now())
   deletedAt DateTime?
+
+  workingAt  CafeStaff[]
+  ownedCafes Cafe[]
+}
+
+model Cafe {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  ownerId   String
+
+  owner  User        @relation(fields: [ownerId], references: [id])
+  staff  CafeStaff[]
+  floors CafeFloor[]
+  menus  Menu[]
+  bills  Bill[]
+}
+
+model CafeStaff {
+  id        String        @id @default(cuid())
+  userId    String
+  cafeId    String
+  role      CafeStaffRole
+  createdAt DateTime      @default(now())
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+  cafe Cafe @relation(fields: [cafeId], references: [id])
+}
+
+model CafeFloor {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  cafeId    String
+
+  cafe     Cafe     @relation(fields: [cafeId], references: [id])
+  canvases Canvas[]
+}
+
+model Canvas {
+  id          Int       @id @default(autoincrement())
+  height      Float
+  width       Float
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime?
+  cafeFloorId String
+
+  cafeFloor CafeFloor    @relation(fields: [cafeFloorId], references: [id])
+  objects   CafeObject[]
+}
+
+model CafeObject {
+  id           String         @id @default(cuid())
+  pos_x_first  Float
+  pos_y_first  Float
+  pos_x_second Float
+  pos_y_second Float
+  metadata     Json?
+  objectType   ObjectTypeEnum
+  canvasId     Int
+
+  canvas Canvas  @relation(fields: [canvasId], references: [id])
+  tables Table[]
+}
+
+model Table {
+  id           String   @id @default(cuid())
+  tableNumber  Int
+  createdAt    DateTime @default(now())
+  cafeObjectId String
+
+  cafeObject CafeObject @relation(fields: [cafeObjectId], references: [id])
+  bills      Bill[]
+}
+
+model Menu {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  cafeId    String
+
+  cafe  Cafe       @relation(fields: [cafeId], references: [id])
+  items MenuItem[]
+}
+
+model MenuItem {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  price       Decimal
+  createdAt   DateTime      @default(now())
+  deletedAt   DateTime?
+  menuId      String
+  type        MenuItemType?
+
+  menu Menu @relation(fields: [menuId], references: [id])
+}
+
+model Bill {
+  id        String    @id @default(cuid())
+  amount    Decimal
+  paid      Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  tableId   String
+  cafeId    String
+
+  table Table @relation(fields: [tableId], references: [id])
+  cafe  Cafe  @relation(fields: [cafeId], references: [id])
 }

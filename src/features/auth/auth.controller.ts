@@ -7,11 +7,12 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.CREATED)
-  @Post('sign-up')
+  @Post('register')
   async signUp(@Body() signUpPayload: AuthenticationPayload) {
     const payload = await this.authService.register(
       signUpPayload.email,
       signUpPayload.password,
+      signUpPayload.name,
     );
 
     if (payload) {
@@ -22,7 +23,7 @@ export class AuthController {
     }
   }
 
-  @Post('sign-in')
+  @Post('login')
   async signIn(@Body() signInPayload: AuthenticationPayload) {
     const payload = await this.authService.login(
       signInPayload.email,

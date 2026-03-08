@@ -8,7 +8,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: configService.get('CAFFENGER_FRONTEND_URL'),
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   });
