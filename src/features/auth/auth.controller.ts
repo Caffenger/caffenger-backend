@@ -1,35 +1,38 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { JwtPayload, MePayload } from './types/auth.types';
 import { AuthService } from './auth.service';
-import type { AuthenticationPayload } from './types/auth.payload.types';
+import { UsersService } from '../users/users.service';
+import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from './guards/jwt-auth-guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private usersService: UsersService, private jwtService: JwtService) {}
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  async signUp(@Body() signUpPayload: AuthenticationPayload) {
-    const payload = await this.authService.register(
-      signUpPayload.email,
-      signUpPayload.password,
-      signUpPayload.name,
-    );
-
-    if (payload) {
-      return await this.authService.login(
-        signUpPayload.email,
-        signUpPayload.password,
-      );
-    }
+  async register(@Body() registerDto: RegisterDto) {
+    return await this.authService.performRegister(registerDto);
   }
 
+  @HttpCode(HttpStatus.OK)
   @Post('login')
-  async signIn(@Body() signInPayload: AuthenticationPayload) {
-    const payload = await this.authService.login(
-      signInPayload.email,
-      signInPayload.password,
-    );
-
-    return payload;
+  async login(@Body() loginDto: LoginDto) {
+    return await this.authService.performLogin(loginDto);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get('me')
+  async me(@Req() request){
+
+    const userId = request.user.userId;
+    return await this.usersService.getUserDataByIdForMeEndpoint(userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  @Get('verify')
+  async verify(){} // on FE check -> 200 or 401
 }
