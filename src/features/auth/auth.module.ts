@@ -1,7 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LoginService } from './login/login.service';
-import { RegisterService } from './register/register.service';
 import { PrismaModule } from '@/lib/prisma/prisma.module';
 import { UsersModule } from '../users/users.module';
 import { JwtModule } from '@nestjs/jwt';
@@ -22,7 +20,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
       inject: [ConfigService],
     }),
   ],
-  providers: [AuthService, LoginService, RegisterService, JwtStrategy],
+  providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}
