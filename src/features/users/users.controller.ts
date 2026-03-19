@@ -1,10 +1,24 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+} from '@nestjs/common';
 import { CafeService } from '../cafe/cafe.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
+import { CurrentUser } from '@/core/decorators/current-user.decorator';
 
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private cafeService: CafeService) {}
 
-  @Get('/profile/:userId')
-  async userProfile(@Param('userId') userId: string) {}
+  @HttpCode(HttpStatus.OK)
+  @Get('/profile/')
+  async userProfile(@CurrentUser('sub') userId: string) {
+    const userCafes = await this.cafeService.getAllUserCafes(userId);
+
+    return userCafes;
+  }
 }
