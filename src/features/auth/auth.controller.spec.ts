@@ -15,11 +15,18 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: {
-            performRegister: jest.fn().mockResolvedValue({ access_token: 'token' }),
-            performLogin: jest.fn().mockResolvedValue({ access_token: 'token' }),
+            performRegister: jest
+              .fn()
+              .mockResolvedValue({ access_token: 'token' }),
+            performLogin: jest
+              .fn()
+              .mockResolvedValue({ access_token: 'token' }),
           },
         },
-        { provide: UsersService, useValue: { getUserDataByIdForMeEndpoint: jest.fn() } },
+        {
+          provide: UsersService,
+          useValue: { getUserDataByIdForMeEndpoint: jest.fn() },
+        },
         { provide: JwtService, useValue: {} },
       ],
     }).compile();
