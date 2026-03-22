@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CafeController } from './cafe.controller';
 import { CafeService } from './cafe.service';
-import { beforeEach, describe, it } from 'node:test';
 
 describe('CafeController', () => {
   let controller: CafeController;
@@ -9,13 +8,24 @@ describe('CafeController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CafeController],
-      providers: [CafeService],
+      providers: [
+        {
+          provide: CafeService,
+          useValue: {
+            getAllUserCafes: jest.fn(),
+            getCafe: jest.fn(),
+            createCafe: jest.fn(),
+            deleteCafe: jest.fn(),
+            softDeleteCafe: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     controller = module.get<CafeController>(CafeController);
   });
 
   it('should be defined', () => {
-    // expect(controller).toBeDefined();
+    expect(controller).toBeDefined();
   });
 });

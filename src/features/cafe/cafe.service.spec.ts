@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CafeService } from './cafe.service';
 import { PrismaService } from '@/lib/prisma/prisma.service';
-import { beforeEach, describe, it } from 'node:test';
 
 const mockPrismaService = {
   cafe: {
