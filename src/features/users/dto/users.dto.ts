@@ -4,3 +4,8 @@ export interface CreateUserDto {
   name: string;
   createdAt: Date;
 }
+
+export class UpdateUserDto {
+  email: string;
+  name: string;
+}
