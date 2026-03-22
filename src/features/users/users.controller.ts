@@ -10,7 +10,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { CurrentUser } from '@/core/decorators/current-user.decorator';
 
 @UseGuards(JwtAuthGuard)
-@Controller('users')
+@Controller('user')
 export class UsersController {
   constructor(private cafeService: CafeService) {}
 
