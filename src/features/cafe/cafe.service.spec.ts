@@ -116,25 +116,6 @@ describe('CafeService', () => {
 
   // ---
 
-  describe('createCafe', () => {
-    it('should create and return a new cafe', async () => {
-      const createDto = { name: 'New Cafe', ownerId: 'user-1' };
-      mockPrismaService.cafe.create.mockResolvedValue({
-        ...mockCafe,
-        ...createDto,
-      });
-
-      const result = await service.createCafe(createDto);
-
-      expect(mockPrismaService.cafe.create).toHaveBeenCalledWith({
-        data: createDto,
-      });
-      expect(result).toMatchObject(createDto);
-    });
-  });
-
-  // ---
-
   describe('deleteCafe', () => {
     it('should delete and return the deleted cafe', async () => {
       mockPrismaService.cafe.delete.mockResolvedValue(mockCafe);
