@@ -20,8 +20,4 @@ export class CreateCafeDto {
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  @IsString()
-  @IsNotEmpty()
-  ownerId: string;
 }

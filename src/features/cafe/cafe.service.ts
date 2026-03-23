@@ -51,9 +51,12 @@ export class CafeService {
     });
   };
 
-  createCafe = async (newCafeData: CreateCafeDto) => {
+  createCafe = async (userId: string, cafeName: string) => {
     return await this.prismaService.cafe.create({
-      data: newCafeData,
+      data: {
+        name: cafeName,
+        ownerId: userId,
+      },
     });
   };
 
