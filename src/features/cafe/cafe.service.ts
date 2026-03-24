@@ -1,10 +1,6 @@
 import { PrismaService } from '@/lib/prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import {
-  GetCafesForUserMinimalDto,
-  CreateCafeDto,
-  OneCafeDto,
-} from './dto/cafe.dto';
+import { GetCafesForUserMinimalDto, OneCafeDto } from './dto/cafe.dto';
 import { Cafe } from '@/generated/prisma/client';
 
 @Injectable()
@@ -60,10 +56,10 @@ export class CafeService {
     });
   };
 
-  deleteCafe = async (cafeData: OneCafeDto) => {
+  deleteCafe = async (id: string) => {
     return await this.prismaService.cafe.delete({
       where: {
-        id: cafeData.id,
+        id,
       },
     });
   };

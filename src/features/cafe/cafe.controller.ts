@@ -1,9 +1,13 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
   InternalServerErrorException,
+  NotFoundException,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +20,17 @@ import { CreateCafeDto } from './dto/cafe.dto';
 @Controller('cafe')
 export class CafeController {
   constructor(private readonly cafeService: CafeService) {}
+
+  @Get(':id')
+  async getCafe(@Param('id') cafeId: string) {
+    const cafe = await this.cafeService.getCafe({
+      id: cafeId,
+    });
+
+    if (!cafe) throw new NotFoundException('Cafe not found');
+
+    return cafe;
+  }
 
   @HttpCode(HttpStatus.OK)
   @Post()
@@ -32,5 +47,15 @@ export class CafeController {
       throw new InternalServerErrorException('Failed to create cafe');
 
     return newCafe;
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async deleteCafe(@Param('id') cafeId: string) {
+    const deletedCafe = await this.cafeService.deleteCafe(cafeId);
+
+    if (!deletedCafe) throw new NotFoundException();
+
+    return deletedCafe;
   }
 }
