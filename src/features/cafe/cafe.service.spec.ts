@@ -120,7 +120,7 @@ describe('CafeService', () => {
     it('should delete and return the deleted cafe', async () => {
       mockPrismaService.cafe.delete.mockResolvedValue(mockCafe);
 
-      const result = await service.deleteCafe({ id: 'cafe-1' });
+      const result = await service.deleteCafe('cafe-1');
 
       expect(mockPrismaService.cafe.delete).toHaveBeenCalledWith({
         where: { id: 'cafe-1' },
