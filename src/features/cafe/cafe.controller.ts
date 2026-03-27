@@ -15,14 +15,15 @@ import { CafeService } from './cafe.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { CurrentUser } from '@/core/decorators/current-user.decorator';
 import { CreateCafeDto } from './dto/cafe.dto';
+import { CAFE_ROUTES } from './cafe.routes';
 
 @UseGuards(JwtAuthGuard)
-@Controller('cafe')
+@Controller(CAFE_ROUTES.BASE)
 export class CafeController {
   constructor(private readonly cafeService: CafeService) {}
 
-  @Get(':id')
-  async getCafe(@Param('id') cafeId: string) {
+  @Get(CAFE_ROUTES.BY_ID)
+  async getCafe(@Param('cafeId') cafeId: string) {
     const cafe = await this.cafeService.getCafe({
       id: cafeId,
     });
@@ -50,8 +51,8 @@ export class CafeController {
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete(':id')
-  async deleteCafe(@Param('id') cafeId: string) {
+  @Delete(CAFE_ROUTES.BY_ID)
+  async deleteCafe(@Param('cafeId') cafeId: string) {
     const deletedCafe = await this.cafeService.deleteCafe(cafeId);
 
     if (!deletedCafe) throw new NotFoundException();

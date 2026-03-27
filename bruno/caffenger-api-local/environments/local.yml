@@ -1,0 +1,8 @@
+name: local
+variables:
+  - name: DATABASE_URL
+    value: postgresql://postgres:password@localhost:5433/main?schema=public
+  - name: CAFFENGER_FRONTEND_URL
+    value: http://localhost:4200
+  - name: BACKEND_URL
+    value: http://localhost:4000
