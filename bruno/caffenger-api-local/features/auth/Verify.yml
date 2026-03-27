@@ -1,0 +1,17 @@
+info:
+  name: Verify
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: http://localhost:4000/auth/verify
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW41cXFmcXQwMDAwNXp3b28yOWo1c3h3IiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwibmFtZSI6IlRlc3RlciIsImlhdCI6MTc3NDUxMzM3MCwiZXhwIjoxNzc0NTE0MjcwLCJpc3MiOiJDYWZmZW5nZXIgb2ZmaWNpYWwifQ.RTFUnFbHnHRdX9xcvPV1UvzAAgDBdRX3UFq3aMqOVkg
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

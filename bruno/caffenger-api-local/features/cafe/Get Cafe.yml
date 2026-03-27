@@ -1,0 +1,17 @@
+info:
+  name: Get Cafe
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: http://localhost:4000/cafe/cmn7dqjq80000vswol1m0no9r
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW43Ym9lNHMwMDAwa2J3bzRjcW8xcHg4IiwiZW1haWwiOiJtaWgubWFyZUBnbWFpbC5jb20iLCJuYW1lIjoiTWFya28gTWloYWpsb3ZpYyIsImlhdCI6MTc3NDU0Mjg2NiwiZXhwIjoxNzc0NTUwMDY2LCJpc3MiOiJDYWZmZW5nZXIgb2ZmaWNpYWwifQ.TCCXzjSztH9KXWCIuBrlEC6k9s2LCiosnSUbMkyIIO0
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -39,10 +39,10 @@ export class CafeService {
         ownerId: userId,
       },
       include: {
-        staff: true,
-        floors: true,
-        menus: true,
-        bills: true,
+        staff: false,
+        floors: false,
+        menus: false,
+        bills: false,
       },
     });
   };

@@ -1,5 +1,3 @@
-import { JwtService } from '@nestjs/jwt';
-import { JwtPayload, MePayload } from './types/auth.types';
 import { AuthService } from './auth.service';
 import { UsersService } from '../users/users.service';
 import { LoginDto, RegisterDto } from './dto/auth.dto';
@@ -14,13 +12,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from './guards/jwt-auth-guard';
+import { CurrentUser } from '@/core/decorators/current-user.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private usersService: UsersService,
-    private jwtService: JwtService,
   ) {}
 
   @HttpCode(HttpStatus.CREATED)
@@ -38,8 +36,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   @Get('me')
-  async me(@Req() request) {
-    const userId = request.user.userId;
+  async me(@CurrentUser('sub') userId: string) {
     return await this.usersService.getUserDataByIdForMeEndpoint(userId);
   }
 

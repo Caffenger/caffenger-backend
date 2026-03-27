@@ -99,21 +99,18 @@ describe('CafeService', () => {
   // ---
 
   describe('getAllUserCafes', () => {
-    it('should return all cafes with relations for a user', async () => {
-      mockPrismaService.cafe.findMany.mockResolvedValue([
-        mockCafeWithRelations,
-      ]);
+    it('should return lightweight cafes without relations for a user', async () => {
+      mockPrismaService.cafe.findMany.mockResolvedValue([mockCafe]);
 
       const result = await service.getAllUserCafes('user-1');
 
       expect(mockPrismaService.cafe.findMany).toHaveBeenCalledWith({
         where: { ownerId: 'user-1' },
-        include: { staff: true, floors: true, menus: true, bills: true },
+        include: { staff: false, floors: false, menus: false, bills: false },
       });
-      expect(result).toEqual([mockCafeWithRelations]);
+      expect(result).toEqual([mockCafe]);
     });
   });
-
   // ---
 
   describe('deleteCafe', () => {

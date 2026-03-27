@@ -123,6 +123,7 @@ model Menu {
   items MenuItem[]
 }
 
+//change relation to N:M
 model MenuItem {
   id          String        @id @default(cuid())
   name        String
@@ -130,10 +131,11 @@ model MenuItem {
   price       Decimal
   createdAt   DateTime      @default(now())
   deletedAt   DateTime?
-  menuId      String
+  menuId      String?
   type        MenuItemType?
 
-  menu Menu @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  // a MenuItem may or may not be assigned to Menu | Deleting menu does not delete MenuItem
+  menu Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull)
 }
 
 model Bill {

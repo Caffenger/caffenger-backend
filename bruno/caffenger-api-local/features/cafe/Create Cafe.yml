@@ -1,0 +1,23 @@
+info:
+  name: Create Cafe
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: http://localhost:4000/cafe
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Test Cafe"
+      }
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW43YXUyM3kwMDAwaWV3b2t1ZW9nOHFnIiwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwibmFtZSI6IlRlc3RlciIsImlhdCI6MTc3NDUyMzQwOCwiZXhwIjoxNzc0NTI0MzA4LCJpc3MiOiJDYWZmZW5nZXIgb2ZmaWNpYWwifQ.Bi2NfOX69c6hhzd6u8dnk04g12U5R7TDGJvmTZJmRuU
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
