@@ -17,6 +17,7 @@ import { CreateMenuDto, UpdateMenuDto } from './dtos/dto';
 import { MenuItemService } from '../menu-item/menu-item.service';
 import { MutateMenuAndItemRelationDto } from '../menu-item/dtos/dto';
 import { MENU_ROUTES } from './menu.routes';
+import { CLIENT_RENEG_LIMIT } from 'node:tls';
 
 @UseGuards(JwtAuthGuard)
 @Controller(MENU_ROUTES.BASE)
@@ -25,6 +26,16 @@ export class MenuController {
     private readonly menuService: MenuService,
     private readonly menuItemService: MenuItemService,
   ) {}
+
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  async getCafeMenus(@Param('cafeId') cafeId: string) {
+    const cafeMenus = await this.menuService.getMenusOfCafeByCafeId(cafeId);
+    console.log(cafeMenus);
+    if (!cafeMenus) throw new NotFoundException();
+
+    return cafeMenus;
+  }
 
   @HttpCode(HttpStatus.CREATED)
   @Post()

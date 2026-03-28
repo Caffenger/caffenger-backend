@@ -123,7 +123,6 @@ model Menu {
   items MenuItem[]
 }
 
-//change relation to N:M
 model MenuItem {
   id          String        @id @default(cuid())
   name        String

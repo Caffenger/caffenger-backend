@@ -11,6 +11,9 @@ export class MenuService {
       where: {
         cafeId,
       },
+      include: {
+        items: true,
+      },
     });
   }
 
