@@ -50,10 +50,10 @@ export class FloorController {
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete()
+  @Delete(FLOOR_ROUTES.BY_ID)
   async deleteCafeFloor(
     @Param('cafeId') cafeId: string,
-    @Param('floordId') floorId: string,
+    @Param('floorId') floorId: string,
   ) {
     const deletedCafeFloor = await this.floorService.deleteCafeFloorByFloorId(
       cafeId,

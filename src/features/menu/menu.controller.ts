@@ -17,7 +17,6 @@ import { CreateMenuDto, UpdateMenuDto } from './dtos/dto';
 import { MenuItemService } from '../menu-item/menu-item.service';
 import { MutateMenuAndItemRelationDto } from '../menu-item/dtos/dto';
 import { MENU_ROUTES } from './menu.routes';
-import { CLIENT_RENEG_LIMIT } from 'node:tls';
 
 @UseGuards(JwtAuthGuard)
 @Controller(MENU_ROUTES.BASE)
@@ -43,6 +42,7 @@ export class MenuController {
     @Param('cafeId') cafeId: string,
     @Body() createMenuDto: CreateMenuDto,
   ) {
+    console.log('ENTERD MENU CONTROLLER', cafeId, createMenuDto);
     const newMenu = await this.menuService.createMenu(cafeId, createMenuDto);
 
     if (!newMenu) throw new InternalServerErrorException();
