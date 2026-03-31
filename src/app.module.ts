@@ -6,12 +6,14 @@ import { ConfigModule } from '@nestjs/config';
 import { CafeModule } from './features/cafe/cafe.module';
 import { MenuModule } from './features/menu/menu.module';
 import { MenuItemModule } from './features/menu-item/menu-item.module';
+import { FloorModule } from './features/floor/floor.module';
 @Module({
   imports: [
     AuthModule,
     CafeModule,
     MenuModule,
     MenuItemModule,
+    FloorModule,
     ConfigModule.forRoot(),
   ],
   controllers: [AppController],

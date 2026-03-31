@@ -14,10 +14,10 @@ export class CafeService {
         id: cafe.id,
       },
       include: {
-        staff: true,
-        floors: true,
-        menus: true,
-        bills: true,
+        staff: false,
+        floors: false,
+        menus: false,
+        bills: false,
       },
     });
   };
