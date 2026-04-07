@@ -21,7 +21,6 @@ export class FloorController {
   @HttpCode(HttpStatus.OK)
   @Get()
   async getCafeFloors(@Param('cafeId') cafeId: string) {
-    console.log('========= FLOOR CNTRL ==========');
     const cafeFloors = this.floorService.getFloorsByCafeId({
       cafeId,
     });

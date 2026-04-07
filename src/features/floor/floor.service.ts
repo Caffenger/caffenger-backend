@@ -5,7 +5,6 @@ import {
   GetCafeFloorsDto,
   UpdateCafeFloorDto,
 } from './types/dtos';
-import { CLIENT_RENEG_LIMIT } from 'tls';
 
 @Injectable()
 export class FloorService {
@@ -32,7 +31,6 @@ export class FloorService {
   }
 
   async deleteCafeFloorByFloorId(cafeId: string, floorId: string) {
-    console.log(cafeId, floorId);
     return await this.prismaService.cafeFloor.delete({
       where: {
         id: floorId,
