@@ -77,13 +77,14 @@ model CafeFloor {
 }
 
 model Canvas {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   height      Float
   width       Float
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
   cafeFloorId String
 
+  // make optional | chase assignable canvases feature
   cafeFloor CafeFloor    @relation(fields: [cafeFloorId], references: [id], onDelete: Cascade)
   objects   CafeObject[]
 }
@@ -96,7 +97,7 @@ model CafeObject {
   pos_y_second Float
   metadata     Json?
   objectType   ObjectTypeEnum
-  canvasId     Int
+  canvasId     String
 
   canvas Canvas  @relation(fields: [canvasId], references: [id], onDelete: Cascade)
   tables Table[]

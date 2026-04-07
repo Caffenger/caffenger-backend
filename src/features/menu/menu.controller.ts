@@ -30,7 +30,6 @@ export class MenuController {
   @Get()
   async getCafeMenus(@Param('cafeId') cafeId: string) {
     const cafeMenus = await this.menuService.getMenusOfCafeByCafeId(cafeId);
-    console.log(cafeMenus);
     if (!cafeMenus) throw new NotFoundException();
 
     return cafeMenus;
@@ -42,7 +41,6 @@ export class MenuController {
     @Param('cafeId') cafeId: string,
     @Body() createMenuDto: CreateMenuDto,
   ) {
-    console.log('ENTERD MENU CONTROLLER', cafeId, createMenuDto);
     const newMenu = await this.menuService.createMenu(cafeId, createMenuDto);
 
     if (!newMenu) throw new InternalServerErrorException();
