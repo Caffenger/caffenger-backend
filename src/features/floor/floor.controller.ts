@@ -13,15 +13,18 @@ import {
 import { FloorService } from './floor.service';
 import { CreateCafeFloorDto } from './types/dtos';
 import { FLOOR_ROUTES } from './floor.routes';
+import { CanvasService } from '../canvas/canvas.service';
 
 @Controller(FLOOR_ROUTES.BASE)
 export class FloorController {
-  constructor(private readonly floorService: FloorService) {}
+  constructor(
+    private readonly floorService: FloorService,
+    private readonly canvasService: CanvasService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Get()
   async getCafeFloors(@Param('cafeId') cafeId: string) {
-    console.log('========= FLOOR CNTRL ==========');
     const cafeFloors = this.floorService.getFloorsByCafeId({
       cafeId,
     });
@@ -40,10 +43,20 @@ export class FloorController {
       cafeId,
       createCafeFloorDto,
     );
-
     if (!newCafeFloor)
       throw new InternalServerErrorException({
         message: 'Failed to create new Cafe Floor',
+      });
+
+    //defaults to 10x10 meters
+    const newFloorCanvas =
+      await this.canvasService.generateDefaultCanvasForNewlyCreatedFloor(
+        newCafeFloor.id,
+      );
+
+    if (!newFloorCanvas)
+      throw new InternalServerErrorException({
+        message: 'Failed to create canvas for new floor',
       });
 
     return newCafeFloor;

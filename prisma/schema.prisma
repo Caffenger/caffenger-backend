@@ -72,17 +72,17 @@ model CafeFloor {
   deletedAt DateTime?
   cafeId    String
 
-  cafe     Cafe     @relation(fields: [cafeId], references: [id], onDelete: Cascade)
-  canvases Canvas[]
+  cafe   Cafe    @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  canvas Canvas?
 }
 
 model Canvas {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(cuid())
   height      Float
   width       Float
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
-  cafeFloorId String
+  cafeFloorId String    @unique
 
   cafeFloor CafeFloor    @relation(fields: [cafeFloorId], references: [id], onDelete: Cascade)
   objects   CafeObject[]
@@ -96,7 +96,7 @@ model CafeObject {
   pos_y_second Float
   metadata     Json?
   objectType   ObjectTypeEnum
-  canvasId     Int
+  canvasId     String
 
   canvas Canvas  @relation(fields: [canvasId], references: [id], onDelete: Cascade)
   tables Table[]
