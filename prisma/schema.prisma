@@ -72,8 +72,8 @@ model CafeFloor {
   deletedAt DateTime?
   cafeId    String
 
-  cafe     Cafe     @relation(fields: [cafeId], references: [id], onDelete: Cascade)
-  canvases Canvas[]
+  cafe   Cafe    @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  canvas Canvas?
 }
 
 model Canvas {
@@ -82,9 +82,8 @@ model Canvas {
   width       Float
   createdAt   DateTime  @default(now())
   deletedAt   DateTime?
-  cafeFloorId String
+  cafeFloorId String    @unique
 
-  // make optional | chase assignable canvases feature
   cafeFloor CafeFloor    @relation(fields: [cafeFloorId], references: [id], onDelete: Cascade)
   objects   CafeObject[]
 }

@@ -1,4 +1,4 @@
 export const CANVAS_ROUTES = {
-  BASE: ':floorId',
+  BASE: 'canvas/:floorId',
   BY_ID: ':canvasId',
 } as const;

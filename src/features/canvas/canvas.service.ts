@@ -5,48 +5,31 @@ import { Injectable } from '@nestjs/common';
 export class CanvasService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getCanvasByCanvasId(id: string) {
+  async getCanvasByFloorId(id: string) {
     return await this.prismaService.canvas.findUnique({
       where: {
-        id,
+        cafeFloorId: id,
+      },
+      include: {
+        objects: true,
       },
     });
   }
 
-  async getAllFloorCanvases(floorId: string) {
-    return await this.prismaService.canvas.findMany({
-      where: {
-        cafeFloorId: floorId,
-      },
-    });
-  }
-
-  async createCanvasForFloor(
-    height: number,
-    width: number,
-    cafeFloorId: string,
-  ) {
+  async generateDefaultCanvasForNewlyCreatedFloor(cafeFloorId: string) {
     return await this.prismaService.canvas.create({
       data: {
-        height,
-        width,
+        height: 10,
+        width: 10,
         cafeFloorId,
       },
     });
   }
 
-  async deleteCanvas(canvasId: string) {
-    return await this.prismaService.canvas.delete({
-      where: {
-        id: canvasId,
-      },
-    });
-  }
-
-  async updateCanvasSize(height: number, width: number, canvasId: string) {
+  async updateCanvasSize(height: number, width: number, floorId: string) {
     return await this.prismaService.canvas.update({
       where: {
-        id: canvasId,
+        cafeFloorId: floorId,
       },
       data: {
         height,
