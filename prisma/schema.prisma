@@ -98,15 +98,15 @@ model CafeObject {
   objectType   ObjectTypeEnum
   canvasId     String
 
-  canvas Canvas  @relation(fields: [canvasId], references: [id], onDelete: Cascade)
-  tables Table[]
+  canvas Canvas @relation(fields: [canvasId], references: [id], onDelete: Cascade)
+  table  Table?
 }
 
 model Table {
   id           String   @id @default(cuid())
   tableNumber  Int
   createdAt    DateTime @default(now())
-  cafeObjectId String
+  cafeObjectId String   @unique
 
   cafeObject CafeObject @relation(fields: [cafeObjectId], references: [id], onDelete: Cascade)
   bills      Bill[]
