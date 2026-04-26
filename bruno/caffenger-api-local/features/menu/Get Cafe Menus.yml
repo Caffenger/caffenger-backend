@@ -1,0 +1,17 @@
+info:
+  name: Get Cafe Menus
+  type: http
+  seq: 3
+
+http:
+  method: GET
+  url: http://localhost:4000/cafe/cmn7sgwoi0000dgwojqzfb4az/menu
+  auth:
+    type: bearer
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbW43Ym9lNHMwMDAwa2J3bzRjcW8xcHg4IiwiZW1haWwiOiJtaWgubWFyZUBnbWFpbC5jb20iLCJuYW1lIjoiTWFya28gTWloYWpsb3ZpYyIsImlhdCI6MTc3NDYxOTQ1MiwiZXhwIjoxNzc0NjI2NjUyLCJpc3MiOiJDYWZmZW5nZXIgb2ZmaWNpYWwifQ.apy0aZ6Xp_oi3eMZLfy3qjd_kK9TCBq581TyaS9JDNE
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

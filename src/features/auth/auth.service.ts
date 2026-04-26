@@ -1,57 +1,84 @@
 import {
-  ForbiddenException,
   Injectable,
-  InternalServerErrorException,
+  ConflictException,
   UnauthorizedException,
 } from '@nestjs/common';
 
-import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { JwtPayload } from './types/auth.types';
+import { LoginDto, RegisterDto } from './dto/auth.dto';
+import { PrismaService } from '@/lib/prisma/prisma.service';
 import { comparePasswords, hashPassword } from '@/utils/bcrypt.utils';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
     private jwtService: JwtService,
-  ) {}
+    private prismaService: PrismaService
+  ) { }
 
-  async login(email: string, password: string) {
-    const user = await this.usersService.findOne(email);
+  async performLogin(loginDto: LoginDto): Promise<{access_token: string}> {
+    const { email, password } = loginDto;
 
-    if (!user) throw new UnauthorizedException('Invalid credentials');
+    const userFound = await this.prismaService.user.findUnique({
+      where: {
+        email
+      }
+    })
 
-    const passwordIsValid = await comparePasswords(password, user.password);
+    if (!userFound) throw new UnauthorizedException();
 
-    if (!passwordIsValid)
-      throw new UnauthorizedException('Invalid credentials');
+    if (!(await comparePasswords(password, userFound.password))) throw new UnauthorizedException();
 
-    const payload = {
-      sub: user.id,
-      email: user.email,
-    };
-    return {
-      message: 'Sign in successful!',
-      access_token: await this.jwtService.signAsync(payload),
-    };
+    const token = await this.generateToken({
+      sub: userFound.id,
+      email: userFound.email,
+      name: userFound.name,
+    })
+    return { access_token: token };
   }
 
-  async register(email: string, password: string) {
-    const emailExists = await this.usersService.findOne(email);
+  // The register service method issues a JWT to login the user upon succesful registration
+  async performRegister(registerDto: RegisterDto): Promise<{access_token: string}> {
+    const { email, name, password } = registerDto
 
-    if (emailExists) throw new ForbiddenException('Email already in use');
+    const userAlreadyExists = await this.prismaService.user.findUnique({
+      where: {
+        email: email
+      }
+    })
+
+    if (userAlreadyExists) throw new ConflictException();
 
     const hashedPassword = await hashPassword(password);
-    const newUser = await this.usersService.createOne(email, hashedPassword);
 
-    if (!newUser)
-      throw new InternalServerErrorException(
-        'Error while registering new user, try again in a couple of minutes',
-      );
+    const newUser = await this.prismaService.user.create({
+      data: {
+        email,
+        name,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+      }
+    });
 
-    return {
-      message: 'Succesfully registered!',
-      user: newUser,
-    };
+    const token = await this.generateToken({
+      sub: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+    })
+    return { access_token: token };
   }
+
+
+  async generateToken(payload: JwtPayload) {
+    return await this.jwtService.signAsync(payload, {
+      issuer: 'Caffenger official'
+    });
+  }
+
+
 }

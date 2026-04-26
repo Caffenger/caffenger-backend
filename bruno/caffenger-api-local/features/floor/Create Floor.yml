@@ -1,0 +1,23 @@
+info:
+  name: Create Floor
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:4000/cafe/{{cafeId}}/floor
+  body:
+    type: json
+    data: |-
+      {
+        "cafeFloorName": "Ground Floor"
+      }
+  auth:
+    type: bearer
+    token: { { authToken } }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

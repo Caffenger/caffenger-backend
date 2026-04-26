@@ -1,0 +1,17 @@
+info:
+  name: Get Floor Canvas
+  type: http
+  seq: 1
+
+http:
+  method: GET
+  url: http://localhost:4000/canvas/{{floorId}}
+  auth:
+    type: bearer
+    token: { { authToken } }
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
