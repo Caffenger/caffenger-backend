@@ -14,19 +14,19 @@ services:
     networks:
       - pg_network
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin_web
-    restart: always
-    environment:
-      PGADMIN_DEFAULT_EMAIL: mih.mare@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: password
-    ports:
-      - '8080:80'
-    depends_on:
-      - db
-    networks:
-      - pg_network
+  # pgadmin:
+  #    image: dpage/pgadmin4
+  #    container_name: pgadmin_web
+  #    restart: always
+  #    environment:
+  #      PGADMIN_DEFAULT_EMAIL: mih.mare@gmail.com
+  #      PGADMIN_DEFAULT_PASSWORD: password
+  #    ports:
+  #      - '8080:80'
+  #    depends_on:
+  #      - db
+  #    networks:
+  #      - pg_network
 
 networks:
   pg_network:

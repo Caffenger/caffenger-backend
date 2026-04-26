@@ -2,8 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
-  HttpStatus,
   InternalServerErrorException,
   Param,
   Post,
@@ -12,7 +10,7 @@ import {
 import { CanvasService } from './canvas.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth-guard';
 import { CANVAS_ROUTES } from './canvas.routes';
-import { CanvasDto } from './types/dtos';
+import { CanvasDto, SaveCanvasDto } from './types/dtos';
 
 @UseGuards(JwtAuthGuard)
 @Controller(CANVAS_ROUTES.BASE)
@@ -27,6 +25,14 @@ export class CanvasController {
       throw new InternalServerErrorException('Error loading canvas');
 
     return floorCanvas;
+  }
+
+  @Post(CANVAS_ROUTES.SAVE)
+  async saveCanvas(
+    @Param('floorId') floorId: string,
+    @Body() dto: SaveCanvasDto,
+  ) {
+    return this.canvasService.saveCanvas(floorId, dto);
   }
 
   @Post(CANVAS_ROUTES.BY_ID)
