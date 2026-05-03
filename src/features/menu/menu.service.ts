@@ -12,7 +12,7 @@ export class MenuService {
         cafeId,
       },
       include: {
-        items: true,
+        items: false,
       },
     });
   }

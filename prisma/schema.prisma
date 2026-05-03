@@ -51,6 +51,7 @@ model Cafe {
   staff  CafeStaff[]
   floors CafeFloor[]
   menus  Menu[]
+  menuItems MenuItem[]
   bills  Bill[]
 }
 
@@ -131,9 +132,13 @@ model MenuItem {
   price       Decimal
   createdAt   DateTime      @default(now())
   deletedAt   DateTime?
-  menuId      String?
   type        MenuItemType?
+  menuId      String?
+  cafeId      String
 
+
+  // a MenuItem must exist under a cafe | later add export, omitting cafeId and menuId
+  cafe Cafe @relation(fields: [cafeId], references: [id], onDelete: Cascade)
   // a MenuItem may or may not be assigned to Menu | Deleting menu does not delete MenuItem
   menu Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull)
 }
