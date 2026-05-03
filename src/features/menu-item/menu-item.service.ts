@@ -16,7 +16,7 @@ export class MenuItemService {
     });
   }
 
-  async mutateOneMenuItem(dto: MutateMenuItemDto) {
+  async mutateOneMenuItem(dto: MutateMenuItemDto, cafeId: string) {
     if (dto.id) {
       return await this.prismaService.menuItem.update({
         where: {
@@ -37,6 +37,7 @@ export class MenuItemService {
         description: dto.description ?? '',
         price: dto.price,
         type: dto.type,
+        cafeId
       },
     });
   }

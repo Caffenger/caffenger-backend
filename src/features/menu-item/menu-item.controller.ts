@@ -28,9 +28,9 @@ export class MenuItemController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('mutate')
-  async mutate(@Body() mutateMenuItemDto: MutateMenuItemDto) {
+  async mutate(@Body() mutateMenuItemDto: MutateMenuItemDto, @Param('cafeId') cafeId: string) {
     const newMenuItem =
-      await this.menuItemService.mutateOneMenuItem(mutateMenuItemDto);
+      await this.menuItemService.mutateOneMenuItem(mutateMenuItemDto, cafeId);
 
     if (!newMenuItem) throw new InternalServerErrorException();
 
