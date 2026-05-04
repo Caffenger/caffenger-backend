@@ -6,17 +6,23 @@ import { MutateMenuAndItemRelationDto, MutateMenuItemDto } from './dtos/dto';
 export class MenuItemService {
   constructor(private prismaService: PrismaService) {}
 
+  async getManyByCafeId(cafeId: string) {
+    return await this.prismaService.menuItem.findMany({
+      where: { cafeId },
+    });
+  }
+
   async getManyByMenuId(menuId: string) {
     return await this.prismaService.menuItem.findMany({
       where: {
-        menu: {
-          id: menuId,
+        entries: {
+          some: { menuId },
         },
       },
     });
   }
 
-  async mutateOneMenuItem(dto: MutateMenuItemDto) {
+  async mutateOneMenuItem(dto: MutateMenuItemDto, cafeId: string) {
     if (dto.id) {
       return await this.prismaService.menuItem.update({
         where: {
@@ -37,24 +43,28 @@ export class MenuItemService {
         description: dto.description ?? '',
         price: dto.price,
         type: dto.type,
+        cafeId
       },
     });
   }
 
-  async mutateMenuAndMenuItemRelationship(dto: MutateMenuAndItemRelationDto) {
-    if (dto.menuId)
-      return await this.prismaService.menuItem.update({
-        where: {
-          id: dto.menuItemId,
-        },
-        data: { menuId: dto.menuId },
-      });
-
-    return await this.prismaService.menuItem.update({
-      where: {
-        id: dto.menuItemId,
+  async assignMenuItemToMenu(dto: MutateMenuAndItemRelationDto) {
+    return await this.prismaService.menuEntry.create({
+      data: {
+        menuId: dto.menuId!,
+        menuItemId: dto.menuItemId,
       },
-      data: { menuId: null },
+    });
+  }
+
+  async removeMenuItemFromMenu(dto: MutateMenuAndItemRelationDto) {
+    return await this.prismaService.menuEntry.delete({
+      where: {
+        menuId_menuItemId: {
+          menuId: dto.menuId!,
+          menuItemId: dto.menuItemId,
+        },
+      },
     });
   }
 }

@@ -51,6 +51,7 @@ model Cafe {
   staff  CafeStaff[]
   floors CafeFloor[]
   menus  Menu[]
+  menuItems MenuItem[]
   bills  Bill[]
 }
 
@@ -120,8 +121,8 @@ model Menu {
   deletedAt DateTime?
   cafeId    String
 
-  cafe  Cafe       @relation(fields: [cafeId], references: [id], onDelete: Cascade)
-  items MenuItem[]
+  cafe    Cafe        @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  entries MenuEntry[]
 }
 
 model MenuItem {
@@ -131,11 +132,21 @@ model MenuItem {
   price       Decimal
   createdAt   DateTime      @default(now())
   deletedAt   DateTime?
-  menuId      String?
   type        MenuItemType?
+  cafeId      String
 
-  // a MenuItem may or may not be assigned to Menu | Deleting menu does not delete MenuItem
-  menu Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull)
+  cafe    Cafe        @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  entries MenuEntry[]
+}
+
+model MenuEntry {
+  menuId     String
+  menuItemId String
+
+  menu     Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@id([menuId, menuItemId])
 }
 
 model Bill {

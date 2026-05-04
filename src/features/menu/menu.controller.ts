@@ -35,6 +35,17 @@ export class MenuController {
     return cafeMenus;
   }
 
+
+  @HttpCode(HttpStatus.OK)
+  @Get(MENU_ROUTES.BY_ID)
+  async getMenu(@Param("menuId") menuId: string){
+    const menu = await this.menuService.getOneById(menuId);
+
+    if(!menu) throw new InternalServerErrorException('Menu not found');
+
+    return menu;
+  }
+
   @HttpCode(HttpStatus.CREATED)
   @Post()
   async createMenu(
@@ -79,7 +90,7 @@ export class MenuController {
   @Post(MENU_ROUTES.ITEMS)
   async addToMenu(@Param() dto: MutateMenuAndItemRelationDto) {
     const assignedMenuItem =
-      await this.menuItemService.mutateMenuAndMenuItemRelationship(dto);
+      await this.menuItemService.assignMenuItemToMenu(dto);
 
     if (!assignedMenuItem) throw new InternalServerErrorException();
 
@@ -89,13 +100,10 @@ export class MenuController {
   @HttpCode(HttpStatus.OK)
   @Delete(MENU_ROUTES.ITEMS)
   async removeFromMenu(@Param() dto: MutateMenuAndItemRelationDto) {
-    const removedSuccesfully =
-      await this.menuItemService.mutateMenuAndMenuItemRelationship({
-        menuItemId: dto.menuItemId,
-        menuId: undefined,
-      });
+    const removedSuccessfully =
+      await this.menuItemService.removeMenuItemFromMenu(dto);
 
-    if (!removedSuccesfully) throw new InternalServerErrorException();
+    if (!removedSuccessfully) throw new InternalServerErrorException();
 
     return HttpStatus.OK;
   }
