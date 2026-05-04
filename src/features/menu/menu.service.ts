@@ -6,13 +6,19 @@ import { PrismaService } from '@/lib/prisma/prisma.service';
 export class MenuService {
   constructor(private prismaService: PrismaService) {}
 
+
+  async getOneById(id: string){
+    return await this.prismaService.menu.findUnique({
+      where: {
+        id
+      }
+    })
+  }
+
   async getMenusOfCafeByCafeId(cafeId: string) {
     return await this.prismaService.menu.findMany({
       where: {
         cafeId,
-      },
-      include: {
-        items: false,
       },
     });
   }

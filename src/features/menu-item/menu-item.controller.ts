@@ -12,12 +12,22 @@ import {
 import { MenuItemService } from './menu-item.service';
 import { MutateMenuAndItemRelationDto, MutateMenuItemDto } from './dtos/dto';
 
-@Controller('cafe/:cafeId/menu/:menuId/menu-item')
+@Controller('cafe/:cafeId')
 export class MenuItemController {
   constructor(private readonly menuItemService: MenuItemService) {}
 
   @HttpCode(HttpStatus.OK)
-  @Get()
+  @Get('menu-item')
+  async getCafeMenuItems(@Param('cafeId') cafeId: string) {
+    const menuItems = await this.menuItemService.getManyByCafeId(cafeId);
+
+    if (!menuItems) throw new NotFoundException();
+
+    return menuItems;
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('menu/:menuId/menu-item')
   async getMenuItems(@Param('menuId') menuId: string) {
     const menuItemsOfMenu = await this.menuItemService.getManyByMenuId(menuId);
 
@@ -27,7 +37,7 @@ export class MenuItemController {
   }
 
   @HttpCode(HttpStatus.CREATED)
-  @Post('mutate')
+  @Post('menu/:menuId/menu-item/mutate')
   async mutate(@Body() mutateMenuItemDto: MutateMenuItemDto, @Param('cafeId') cafeId: string) {
     const newMenuItem =
       await this.menuItemService.mutateOneMenuItem(mutateMenuItemDto, cafeId);

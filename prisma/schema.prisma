@@ -121,8 +121,8 @@ model Menu {
   deletedAt DateTime?
   cafeId    String
 
-  cafe  Cafe       @relation(fields: [cafeId], references: [id], onDelete: Cascade)
-  items MenuItem[]
+  cafe    Cafe        @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  entries MenuEntry[]
 }
 
 model MenuItem {
@@ -133,14 +133,20 @@ model MenuItem {
   createdAt   DateTime      @default(now())
   deletedAt   DateTime?
   type        MenuItemType?
-  menuId      String?
   cafeId      String
 
+  cafe    Cafe        @relation(fields: [cafeId], references: [id], onDelete: Cascade)
+  entries MenuEntry[]
+}
 
-  // a MenuItem must exist under a cafe | later add export, omitting cafeId and menuId
-  cafe Cafe @relation(fields: [cafeId], references: [id], onDelete: Cascade)
-  // a MenuItem may or may not be assigned to Menu | Deleting menu does not delete MenuItem
-  menu Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull)
+model MenuEntry {
+  menuId     String
+  menuItemId String
+
+  menu     Menu     @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuItem MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@id([menuId, menuItemId])
 }
 
 model Bill {
